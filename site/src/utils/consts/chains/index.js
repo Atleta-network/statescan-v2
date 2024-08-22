@@ -20,8 +20,10 @@ import tinkernet from "./tinkernet";
 import peopleKusama from "./people-kusama";
 import bridgehubPolkadot from "./bridgehub-polkadot";
 import bridgehubKusama from "./bridgehub-kusama";
+import atleta from "./atleta";
 
 const chains = {
+  atleta,
   kusama,
   polkadot,
   litentry,

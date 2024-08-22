@@ -1,6 +1,7 @@
 const isNil = require("lodash.isnil");
 
 const chains = Object.freeze({
+  atleta: "atleta",
   polkadot: "polkadot",
   kusama: "kusama",
   statemine: "statemine",
@@ -30,6 +31,7 @@ const chains = Object.freeze({
 });
 
 const ss58Format = Object.freeze({
+  [chains.atleta]: 2340,
   [chains.polkadot]: 0,
   [chains.kusama]: 2,
   [chains.statemine]: 2,

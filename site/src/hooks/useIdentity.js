@@ -34,7 +34,7 @@ export function useIdentity(address = "") {
       fetchIdentity(chainSettings.identity, address).then((identity) => {
         setIdentity(identity);
         identityCacheMap[address] = identity;
-      });
+      }).catch((err) => err);
     }
   }, [identity, address, hasIdentity, chainSettings.identity, fetcher]);
 
