@@ -30,7 +30,11 @@ export function connect() {
     disconnect();
   }
 
-  socket = io(new URL("/", getEnvEndpoint()).href);
+  const path = getEnvEndpoint();
+  const endpoint = URL.canParse(path) ? path : new URL(path.endsWith('/') ? path : `${path}/`, window.location.origin).href; 
+  socket = io(new URL("/", endpoint).href, {
+    path: new URL("./socket.io", endpoint).pathname,
+  });
   socket.connect();
   store.dispatch(setLatestBlocksLoading(true));
   store.dispatch(setLatestSignedTransfersLoading(true));

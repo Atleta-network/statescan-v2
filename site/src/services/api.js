@@ -3,13 +3,30 @@ const paramsKeyConvert = (str = "") =>
 
 class Api {
   endpoint = null;
+  withOrigin = false;
 
-  constructor(endpoint) {
-    this.endpoint = endpoint;
+  constructor({ path, withOrigin }) {
+    this.endpoint = path;
+    this.withOrigin = withOrigin;
   }
 
+  __getURL(path) {
+    if (this.withOrigin) {
+      return new URL(path, this.endpoint);
+    }
+
+    if (URL.canParse(path)) {
+      return new URL(path);
+    }
+
+    return new URL(
+      `.${path}`,
+      new URL(this.endpoint.endsWith('/') ? this.endpoint : `${this.endpoint}/`, window.location.origin).href
+    );
+  } 
+
   fetch = (path, params = {}, options) => {
-    const url = new URL(path, this.endpoint);
+    const url = this.__getURL(path);
     for (const key of Object.keys(params)) {
       url.searchParams.set(paramsKeyConvert(key), params[key]);
     }
@@ -51,6 +68,20 @@ class Api {
   };
 }
 
-const api = new Api(new URL(process.env.REACT_APP_PUBLIC_API_END_POINT).href);
+const tryParseToUrl = path => {
+  if (URL.canParse(path)) {
+    return {
+      path: new URL(path).href,
+      withOrigin: true,
+    };
+  }
+
+  return {
+    path,
+    withOrigin: false,
+  };
+} 
+
+const api = new Api(tryParseToUrl(process.env.REACT_APP_PUBLIC_API_END_POINT));
 
 export default api;
